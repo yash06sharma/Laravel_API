@@ -1,0 +1,16 @@
+[0;1;32m●[0m bluetooth.service - Bluetooth service
+     Loaded: loaded (/lib/systemd/system/bluetooth.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Wed 2023-12-13 11:27:53 IST; 15s ago
+       Docs: man:bluetoothd(8)
+   Main PID: 11243 (bluetoothd)
+     Status: "Running"
+      Tasks: 1 (limit: 9296)
+     Memory: 544.0K
+     CGroup: /system.slice/bluetooth.service
+             └─11243 /usr/lib/bluetooth/bluetoothd
+
+Dec 13 11:27:53 pc1-Latitude-E5550 systemd[1]: Starting Bluetooth service...
+Dec 13 11:27:53 pc1-Latitude-E5550 bluetoothd[11243]: Bluetooth daemon 5.53
+Dec 13 11:27:53 pc1-Latitude-E5550 systemd[1]: Started Bluetooth service.
+Dec 13 11:27:53 pc1-Latitude-E5550 bluetoothd[11243]: Starting SDP server
+Dec 13 11:27:53 pc1-Latitude-E5550 bluetoothd[11243]: Bluetooth management interface 1.21 initialized
