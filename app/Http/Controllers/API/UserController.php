@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Preuser;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -40,15 +41,27 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $insertData = new Preuser;
-        $insertData->name = $request->name;
-        $insertData->email = $request->email;
-        $insertData->password = $request->password;
-        $insertData->address = $request->address;
-        $insertData->type = 'user';
-        $insertData->save();
+        if($request->id != null){
+            $editData = Preuser::find($request->id);
+            $editData->name = $request->name;
+            $editData->email = $request->email;
+            $editData->password = Hash::make($request->password);
+            $editData->address = $request->address;
+            $editData->type = 'user';
+            $editData->save();
+            $msg = "Data updated successfully!";
+        }else{
+            $insertData = new Preuser;
+            $insertData->name = $request->name;
+            $insertData->email = $request->email;
+            $insertData->password = Hash::make($request->password);
+            $insertData->address = $request->address;
+            $insertData->type = 'user';
+            $insertData->save();
+            $msg = "Data registered successfully!";
+        }
 
-        return response()->json("Data registered successfully!", 201);
+        return response()->json($msg, 201);
 
         // return response(['success' => $request->all()]);
     }
@@ -86,7 +99,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $editData = Preuser::find($id);
+        return response()->json($editData);
     }
 
     /**

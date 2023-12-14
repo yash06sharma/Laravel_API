@@ -7,7 +7,7 @@
     <div class="col-sm-6 mt-5">
 
            <form  id="form">
-
+            <input type="text" class="form-control" name="sid" id="sid" value="">
             <div class="mb-3 row">
                 <label for="name" class="col-sm-2 col-form-label">Name</label>
                 <div class="col-sm-6">
@@ -40,11 +40,7 @@
                 </div>
               </div>
 
-                <button type="submit" class="btn btn-primary">Register</button>
-
-
-
-
+                <button type="submit" class="btn btn-primary register">Register</button>
 
                     <div class="msg"></div>
 
@@ -65,10 +61,10 @@
               </tr>
             </thead>
             <tbody  class="user">
-
-
             </tbody>
+
           </table>
+          <div class="message"></div>
     </div>
 
 </div>
@@ -80,18 +76,12 @@
 $(document).ready(function () {
 
     $('.msg').hide();
-
     function showData(){
         $.ajax({
             type: "GET",
             url: "{{ route('getdata')}}",
             dataType: "json",
             success: function (response) {
-                        // console.log(response);
-                        // response.forEach(element => {
-
-                        //     console.log(element);
-                        // });
                         $(".user").text('');
                         $.each(response,function(index,user)
                         {
@@ -100,7 +90,7 @@ $(document).ready(function () {
                         html += `<td>${user.name}</td>`;
                         html += `<td class='email'>${user.email}</td>`;
                         html += `<td class='email'>${user.address}</td>`;
-                        html += `<td><button class="btn btn-sm btn-secondary" editId="${user.id}">Edit</button>&nbsp;&nbsp;<button class="btn btn-sm btn-warning btn-del" data-delId="${user.id}">Delete</button></td>`;
+                        html += `<td><button class="btn btn-sm btn-secondary btn-edit" data-editId="${user.id}">Edit</button>&nbsp;&nbsp;<button class="btn btn-sm btn-warning btn-del" data-delId="${user.id}">Delete</button></td>`;
                         $('.user').append(html);
                         });
                 },
@@ -115,13 +105,14 @@ $(document).ready(function () {
 
             $('#form').submit(function (event) {
                 event.preventDefault();
-
+                let id = $('#sid').val();
                 let name = $('#name').val();
                 let email = $('#email').val();
                 let password = $('#password').val();
                 let address = $('#address').val();
                 // return true;
                 insertData = {
+            id :id,
             name: name,
             email: email,
             password: password,
@@ -139,14 +130,10 @@ $(document).ready(function () {
                     success: function (response) {
                         console.log(response);
                         $('.msg').html("data Register Sucessfully!").show();
-                        $('.msg').addClass( "alert alert-success" ).fadeOut(2000);
-                        // $( "p" ).addClass( "alert alert-success" );
-
-
+                        $('.msg').addClass( "alert alert-success" ).fadeOut(5000);
                     },
                     error: function (xhr, status, error) {
                     alert('Error inserting task: ' + xhr.responseText);
-
                 },
                 complete: function(response){
                         console.log('data completed');
@@ -163,10 +150,28 @@ $(document).ready(function () {
                 url: "/api/delete/"+delId,
                 dataType: "json",
                 success: function (response) {
-                    showData();
+                        $('.message').html("data Deleted Sucessfully!").show();
+                        $('.message').addClass( "alert alert-success" ).fadeOut(5000);
+                showData();
                 }
                });
+            });
 
+            $('.user').on("click", ".btn-edit" ,function () {
+               let editId =  $(this).attr('data-editId');
+               $.ajax({
+                type: "GET",
+                url: "/api/edit/"+editId,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                 $("#sid").val(response['id']);
+                 $("#name").val(response['name']);
+                 $("#email").val(response['email']);
+                 $("#password").val(response['password']);
+                 $("#address").val(response['address']);
+                }
+               });
             });
 
         });

@@ -18,7 +18,7 @@
             </thead>
             <tbody>
 
-                @foreach ($displayData as $item)
+                {{-- @foreach ($displayData as $item)
 
                 <tr>
                     <td>{{$item->id}}</td>
@@ -30,7 +30,7 @@
                     </td>
                 </tr>
 
-                @endforeach
+                @endforeach --}}
 
             </tbody>
           </table>
