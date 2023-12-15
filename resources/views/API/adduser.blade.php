@@ -7,7 +7,7 @@
     <div class="col-sm-6 mt-5">
 
            <form  id="form">
-            <input type="text" class="form-control" name="sid" id="sid" value="">
+            <input type="hidden" class="form-control" name="sid" id="sid" value="">
             <div class="mb-3 row">
                 <label for="name" class="col-sm-2 col-form-label">Name</label>
                 <div class="col-sm-6">
@@ -74,7 +74,6 @@
 <script>
 
 $(document).ready(function () {
-
     $('.msg').hide();
     function showData(){
         $.ajax({
@@ -97,29 +96,88 @@ $(document).ready(function () {
                     error: function (xhr, status, error) {
                     alert('Error inserting task: ' + xhr.responseText);
                 }
-
         });
     }
-
     showData();
+    //------------------End Get Data-------------------
 
+    function handleValidation() {
+
+                let validations = {
+                    'email': [
+                        {
+                            'regex': /([^\s])/,
+                            'message': 'Email field is required!'
+                        },
+                        {
+                            'regex': /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            'message': 'Please enter valid email!'
+                        }
+                    ],
+                    "name": [
+                        {
+                            'regex': /([^\s])/,
+                            'message': 'Name field is required!'
+                        }
+                    ],
+                    "password": [
+                        {
+                            'regex': /([^\s])/,
+                            'message': 'Password field is required!'
+                        }
+                    ],
+                    "address": [
+                        {
+                            'regex': /([^\s])/,
+                            'message': 'Address field is required!'
+                        }
+                    ]
+                };
+                let isValid = true;
+                $("#form :input").each(function() {
+                    let el = $(this);
+                    let elementName = el.attr('name');
+                    el.next('.error').hide();
+                    let validation = validations[`${elementName}`];
+                    let hasError = false;
+
+                    $.each(validation, function (i, field) {
+                        if (!hasError && !field.regex.test(el.val())) {
+                            el.next('.error').text(field.message);
+                            el.next('.error').show();
+                            hasError = true;
+                            isValid = false;
+                        }
+                    });
+                });
+                if ($('#form :input .error').text()) {
+                    isValid = false;
+                 }
+                 return isValid;
+            }
             $('#form').submit(function (event) {
                 event.preventDefault();
-                let id = $('#sid').val();
+
+                let isValid = handleValidation();
+                if (isValid) {
+                    submitFormByAjax();
+                }
+            });
+            function submitFormByAjax() {
+                let sid = $('#sid').val();
                 let name = $('#name').val();
                 let email = $('#email').val();
                 let password = $('#password').val();
                 let address = $('#address').val();
-                // return true;
+
                 insertData = {
-            id :id,
+            id :sid,
             name: name,
             email: email,
             password: password,
             address: address,
         }
-        // JSON.stringify(insertData)
-                $.ajax({
+                  $.ajax({
                     type: "POST",
                     url: "{{ route('add')}}",
                     data: insertData,
@@ -141,7 +199,11 @@ $(document).ready(function () {
                         showData();
             }
                 });
-            });
+
+            }
+ //-----------____End Insert Data ---------------------------
+
+
 
             $('.user').on("click", ".btn-del" ,function () {
                let delId =  $(this).attr('data-delId');
@@ -173,9 +235,7 @@ $(document).ready(function () {
                 }
                });
             });
-
         });
-
 </script>
 @endsection
 

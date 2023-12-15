@@ -41,7 +41,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->id != null){
+
+         if($request->id != null){
             $editData = Preuser::find($request->id);
             $editData->name = $request->name;
             $editData->email = $request->email;
@@ -50,16 +51,17 @@ class UserController extends Controller
             $editData->type = 'user';
             $editData->save();
             $msg = "Data updated successfully!";
-        }else{
-            $insertData = new Preuser;
-            $insertData->name = $request->name;
-            $insertData->email = $request->email;
-            $insertData->password = Hash::make($request->password);
-            $insertData->address = $request->address;
-            $insertData->type = 'user';
-            $insertData->save();
-            $msg = "Data registered successfully!";
-        }
+            }else{
+
+                $insertData = new Preuser;
+                $insertData->name = $request->name;
+                $insertData->email = $request->email;
+                $insertData->password = Hash::make($request->password);
+                $insertData->address = $request->address;
+                $insertData->type = 'user';
+                $insertData->save();
+                $msg = "Data registered successfully!";
+            }
 
         return response()->json($msg, 201);
 
@@ -107,12 +109,18 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+            // $editData = Preuser::find($request->id);
+            // $editData->name = $request->name;
+            // $editData->email = $request->email;
+            // $editData->password = Hash::make($request->password);
+            // $editData->address = $request->address;
+            // $editData->type = 'user';
+            // $editData->save();
+            // $msg = "Data updated successfully!";
     }
 
     /**
