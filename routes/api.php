@@ -23,22 +23,22 @@ use App\Http\Controllers\API\AuthController;
 Route::get('/register', function () {
     return view('Auth.register');
 });
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'store'])->name('authreg');
+
 
 Route::get('/login', function () {
     return view('Auth.login');
 });
 
 Route::post('/login', [AuthController::class, 'login']);
-
-
 Route::middleware('auth:sanctum')->group(function () {
     //-------------under API Auth-------------
 Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/dashboard', [UserController::class, 'dashboard']);
 });
 
-Route::get('/user', [UserController::class, 'index'])->name('getdata');
-Route::get('/adduser', [UserController::class, 'create']);
-Route::post('/adduser', [UserController::class, 'store'])->name('add');
-Route::get('/delete/{id}', [UserController::class, 'destroy'])->name('deleted');
-Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edited');
+
+// Route::get('/adduser', [UserController::class, 'create']);
+// Route::post('/adduser', [UserController::class, 'store'])->name('add');
+// Route::get('/delete/{id}', [UserController::class, 'destroy'])->name('deleted');
+// Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edited');

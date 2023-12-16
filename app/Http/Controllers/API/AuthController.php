@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -18,7 +21,11 @@ class AuthController extends Controller
      */
     public function dashboard()
     {
-        //
+
+        $user = User::all();
+        return response([
+            'User Data'=> $user,
+        ]);
     }
 
     /**
@@ -26,16 +33,15 @@ class AuthController extends Controller
      *@param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
+    public function store(Request $request)
     {
-        $user = User::create([
-            'name'=> $request->name,
-            'email'=> $request->email,
-            'password'=> Hash::make($request->password),
+        User::create([
+            "name"=> $request->name,
+            "email"=> $request->email,
+            "password"=> Hash::make($request->password),
         ]);
-        return response([
-            'user' => $user,
-        ],201);
+
+        return response()->json(['success' => $request->all()]);
     }
 
     /**
@@ -52,8 +58,7 @@ class AuthController extends Controller
                 'message'=>'Credentials are incorrect!'
             ],401);
         }
-
-            $token = $user->createToken('userToken')->plainTextToken;
+            $token = $user->createToken('userToken'."=>".$request->email)->plainTextToken;
             return response([
                 'user' => $user,
                 'token' => $token
