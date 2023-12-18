@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AuthController;
-
+// use App\Http\Middleware\EnsureCorsError;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,27 +15,31 @@ use App\Http\Controllers\API\AuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+
 
 
 Route::get('/register', function () {
     return view('Auth.register');
 });
+
 Route::post('/register', [AuthController::class, 'store'])->name('authreg');
-
-
 Route::get('/login', function () {
     return view('Auth.login');
 });
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->group(function () {
+// ['auth:sanctum']
+
+Route::middleware(['validToken'])->group(function () {
     //-------------under API Auth-------------
-Route::get('/logout', [AuthController::class, 'logout']);
-Route::get('/dashboard', [UserController::class, 'dashboard']);
+    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+
+
+
+
 
 
 // Route::get('/adduser', [UserController::class, 'create']);

@@ -18,6 +18,12 @@ return [
         'passwords' => 'users',
     ],
 
+    // 'defaults' => [
+    //     'guard' => 'api',
+    //     'passwords' => 'users',
+    // ],
+
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -39,6 +45,12 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+            'hash' => true,
         ],
     ],
 

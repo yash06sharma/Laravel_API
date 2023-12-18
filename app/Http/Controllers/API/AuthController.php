@@ -12,20 +12,19 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-
-
     /**
      * Display a listing of the resource.
      *@param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function dashboard()
+    public function dashboard(Request $request)
     {
+        if($request->user()){
+            $user = User::all();
+            // return view('Auth.dashboard_userlist',['displayData'=> $user]);
+            return response()->json(['UserData' => $user]);
 
-        $user = User::all();
-        return response([
-            'User Data'=> $user,
-        ]);
+        }
     }
 
     /**
@@ -64,23 +63,19 @@ class AuthController extends Controller
                 'token' => $token
             ],201);
     }
-
     /**
      * Remove the specified resource from storage.
      *
      *
      * @return \Illuminate\Http\Response
      */
-    public function logout()
+    public function logout(Request $request)
     {
         auth()->user()->tokens()->delete();
         return response([
             'message'=>'Logged out!'
         ]);
     }
-
-
-
     /**
      * Display the specified resource.
      *

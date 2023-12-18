@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureCorsError
+class EnsureTokenIsValid
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,9 @@ class EnsureCorsError
      */
     public function handle(Request $request, Closure $next)
     {
-        echo "hy";
-        $response = $next($request);
-        return $response;
+     if (!auth('sanctum')->check()) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+        return $next($request);
     }
 }
