@@ -64,6 +64,7 @@ $(document).ready(function () {
                         $.ajax({
             url: '/api/dashboard',
             type: 'GET',
+            data: response,
             headers: {
                 Authorization: 'Bearer ' + response.token,
             },

@@ -20,16 +20,11 @@ class AuthController extends Controller
      */
     public function dashboard(Request $request)
     {
-        // if($request->user()){
-        //     $user = User::all();
-        //     // return view('Auth.dashboard_userlist',['displayData'=> $user]);
-        //     return response()->json(['UserData' => $user]);
-
-        // }
-
-
-        $user = User::all();
-        return response()->json(['UserData' => $user]);
+            $user = User::find($request->user['id']);
+            if($user){
+                return response()->json(['UserData' => $user]);
+            }   
+                return response()->json(['UserData' => "Sorry Mismatch User"]);
     }
 
     /**
@@ -45,7 +40,7 @@ class AuthController extends Controller
             "password"=> Hash::make($request->password),
         ]);
 
-        return response()->json(['success' => $request->all()]);
+        return response()->json(['success' => "$request->all()"]);
     }
 
     /**
@@ -76,10 +71,21 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $authorizationHeader = $request->header('Authorization');
-        return response([
-            'message'=> $authorizationHeader,
-        ]);
+
+        //-----------------Under Work-----------------
+
+        // $authorizationHeader = $request->header('Authorization');
+        // // $user = DB::table('personal_access_tokens')->where('token',$authorizationHeader)->first();
+        // $user = User::find($request->user['id']);
+        // if($user){
+        //     // $user->delete();
+        //             return response([
+        //                 'message'=> $user,
+        //             ]);
+        // }
+        // return response([
+        //     'message'=> "Sorry Token Is invalid!!",
+        // ]);
     }
     /**
      * Display the specified resource.
