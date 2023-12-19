@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -19,12 +20,16 @@ class AuthController extends Controller
      */
     public function dashboard(Request $request)
     {
-        if($request->user()){
-            $user = User::all();
-            // return view('Auth.dashboard_userlist',['displayData'=> $user]);
-            return response()->json(['UserData' => $user]);
+        // if($request->user()){
+        //     $user = User::all();
+        //     // return view('Auth.dashboard_userlist',['displayData'=> $user]);
+        //     return response()->json(['UserData' => $user]);
 
-        }
+        // }
+
+
+        $user = User::all();
+        return response()->json(['UserData' => $user]);
     }
 
     /**
@@ -71,9 +76,9 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        auth()->user()->tokens()->delete();
+        $authorizationHeader = $request->header('Authorization');
         return response([
-            'message'=>'Logged out!'
+            'message'=> $authorizationHeader,
         ]);
     }
     /**

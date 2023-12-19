@@ -41,7 +41,6 @@ Route::middleware(['validToken'])->group(function () {
 
 
 
-
 // Route::get('/adduser', [UserController::class, 'create']);
 // Route::post('/adduser', [UserController::class, 'store'])->name('add');
 // Route::get('/delete/{id}', [UserController::class, 'destroy'])->name('deleted');
