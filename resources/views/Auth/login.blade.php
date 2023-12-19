@@ -62,7 +62,7 @@ $(document).ready(function () {
                         //-------------Dashboard-----------------
 
                         $.ajax({
-            url: '/api/dashboard',
+            url: '/api/logout',
             type: 'GET',
             headers: {
                 Authorization: 'Bearer ' + response.token,

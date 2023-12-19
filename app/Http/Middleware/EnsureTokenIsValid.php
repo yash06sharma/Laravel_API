@@ -16,9 +16,25 @@ class EnsureTokenIsValid
      */
     public function handle(Request $request, Closure $next)
     {
-     if (!auth('sanctum')->check()) {
-            return response()->json(['error' => 'Unauthenticated'], 401);
+            $token = $this->extractBearerToken($request);
+
+            if (!$token) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+
+            // Perform additional checks or logic if needed
+
+            return $next($request);
         }
-        return $next($request);
+
+        private function extractBearerToken($request)
+        {
+            $authorizationHeader = $request->header('Authorization');
+
+            if (preg_match('/Bearer\s+(.*)$/i', $authorizationHeader, $matches)) {
+                return $matches[1];
+            }
+
+            return null;
+        }
     }
-}
