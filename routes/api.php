@@ -17,30 +17,6 @@ use App\Http\Controllers\API\AuthController;
 */
 
 
-
-Route::get('/register', function () {
-    return view('Auth.register');
-});
-
-Route::post('/register', [AuthController::class, 'store'])->name('authreg');
-Route::get('/login', function () {
-    return view('Auth.login');
-});
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-
-// ['auth:sanctum']
-
-Route::middleware(['validToken'])->group(function () {
-    //-------------under API Auth-------------
-    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-});
-
-
-
-
-
-
 // Route::get('/adduser', [UserController::class, 'create']);
 // Route::post('/adduser', [UserController::class, 'store'])->name('add');
 // Route::get('/delete/{id}', [UserController::class, 'destroy'])->name('deleted');
