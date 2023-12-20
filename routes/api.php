@@ -2,9 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\AuthController;
-// use App\Http\Middleware\EnsureCorsError;
+use App\Http\Controllers\API\ResourcesController;
+use App\Http\Controllers\API\CRUDController;
+use App\Http\Resources\PreuserResources;
+use App\Models\Preuser;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,9 +16,17 @@ use App\Http\Controllers\API\AuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('/userlist', [ResourcesController::class, 'index']);
+ 
+Route::get('/datalist', function () {
+    return new PreuserResources(Preuser::all());
+
+    //---------------pagination-----------
+    // return new PreuserResources(Preuser::paginate());
+});
 
 
-// Route::get('/adduser', [UserController::class, 'create']);
-// Route::post('/adduser', [UserController::class, 'store'])->name('add');
-// Route::get('/delete/{id}', [UserController::class, 'destroy'])->name('deleted');
-// Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edited');
+
+Route::resource('customer', CRUDController::class);
+
+

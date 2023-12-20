@@ -8,8 +8,7 @@ use App\Models\Preuser;
 use App\Http\Resources\PreuserResources;
 use Illuminate\Support\Facades\Hash;
 
-
-class ResourcesController extends Controller
+class CRUDController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -40,7 +39,15 @@ class ResourcesController extends Controller
      */
     public function store(Request $request)
     {
-    
+        $product = Preuser::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'address' => $request->address,
+            'type' => 'user',
+        ]);
+
+        return new PreuserResources($product);
     }
 
     /**
@@ -51,8 +58,8 @@ class ResourcesController extends Controller
      */
     public function show($id)
     {
-     
-   
+        $id = Preuser::findOrFail($id);
+        return new PreuserResources($id);
     }
 
     /**
@@ -75,7 +82,15 @@ class ResourcesController extends Controller
      */
     public function update(Request $request, $id)
     {
-       
+        $product = Preuser::findOrFail($id);
+        $product->update([
+             'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'address' => $request->address ,
+            'type' => 'user',
+        ]);
+        return new PreuserResources($product);
     }
 
     /**
@@ -86,6 +101,10 @@ class ResourcesController extends Controller
      */
     public function destroy($id)
     {
-      
+        $product = Preuser::findOrFail($id);
+        $product->delete();
+        return response()->json([
+            'success' => 'data is successfully deleted!!'
+        ], 204);
     }
 }
